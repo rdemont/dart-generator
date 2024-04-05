@@ -20,6 +20,8 @@ for table in structure["tables"]:
         setFunctions = ""
         importBusiness = ""
         getColumnName = "  static const String TABLE_NAME = \""+tableName+"\";\n"
+        getColumnName = "  static const String COLUMN_ID = \"id\";\n"
+
 
         variableDefinitionDB = ""
         getFunctionsDB = ""
