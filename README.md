@@ -1,5 +1,13 @@
 Generator for flutter/Dart code base on a json with the structure (exemple is file structure.json)
 
+output will be in forlder 
+/busnessObj <- possible change, must be copy only once 
+/busnessObj/gen/ <- business implementation must not be change 
+/databaseObj <- database implementation must not be change 
+
+prerequisit : 
+- FK must hase the main table name and end with "Id"
+- PK must be integer autoincrement 
 
 
 can be made in the openDB with this code and import 'dart:developer';
