@@ -1,0 +1,35 @@
+import '../databaseObj/${tablename}DBGen.dart';
+import '../../businessObj/${tablename}.dart';
+import '../../businessObj/businessObj.dart';
+${importBusiness}
+
+class ${Tablename}Gen extends BusinessObj
+{
+  ${Tablename}DBGen get _localDbObj => dbObj as ${Tablename}DBGen ;
+
+  ${Tablename}Gen(super.dbObj);
+
+$getColumnName
+
+
+$getFunctions
+
+$setFunctions
+
+  static ${Tablename} newObj(){
+    ${Tablename}DBGen objDb = ${Tablename}DBGen();
+    return objDb.newObj();
+  }
+
+  static Future<${Tablename}> openObj(int id){
+    ${Tablename}DBGen objDb = ${Tablename}DBGen();
+    return objDb.open(id);
+  }
+
+  static Future<${Tablename}> fromMap(Map<String,Object?>map){
+    ${Tablename}DBGen objDb = ${Tablename}DBGen();
+    return objDb.fromMap(map);
+  }
+
+
+}

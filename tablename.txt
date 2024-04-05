@@ -1,6 +1,6 @@
-import 'gen/${tablename}Impl.dart';
+import '../generate/businessObj/${tablename}Gen.dart';
 
-class ${Tablename} extends ${Tablename}Impl
+class ${Tablename} extends ${Tablename}Gen
 {
   ${Tablename}(super.dbObj);
 

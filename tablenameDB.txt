@@ -1,13 +1,14 @@
-import '../businessObj/${tablename}.dart';
-import 'databaseObj.dart';
+import '../../businessObj/${tablename}.dart';
+import '../businessObj/${tablename}Gen.dart';
+import '../../databaseObj/databaseObj.dart';
 ${importDB}
 
-class ${Tablename}DB extends DatabaseObj {
+class ${Tablename}DBGen extends DatabaseObj {
   
 $variableDefinition
 
 
-  ${Tablename}DB()
+  ${Tablename}DBGen()
   {
     tableName = '${tablename}';
   }
@@ -41,7 +42,6 @@ $openfk
   @override
   Map<String, Object?> toMap() 
   {
-    //Map<String, Object?> result = super.toMap();
     return{
 $returnVariables
     };

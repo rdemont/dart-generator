@@ -10,14 +10,16 @@ structure = json.loads(structFileContent)
 
 
 shutil.rmtree("results/")
-os.makedirs("results/businessObj/gen/")
-os.makedirs("results/databaseObj/")
+os.makedirs("results/generate/businessObj/")
+os.makedirs("results/generate/databaseObj/")
+os.makedirs("results/businessObj/")
 
 for table in structure["tables"]:
     for tableName, columns in table.items():
         getFunctions = ""
         setFunctions = ""
         importBusiness = ""
+        getColumnName = "  static const String TABLE_NAME = \""+tableName+"\";\n"
 
         variableDefinitionDB = ""
         getFunctionsDB = ""
@@ -26,6 +28,8 @@ for table in structure["tables"]:
         fromMapVariables = ""
         openfk = ""
         importDB = ""
+        
+                
 
         for column in columns:
             if (column["ispk"] == "0"):  
@@ -35,46 +39,46 @@ for table in structure["tables"]:
                 if(column["type"] == "TEXT"):
                     type = "String"
                     defaultValue = "''"
-                    returnVariables += "      '"+column['name']+"' : _"+column['name']+",\n"
-                    fromMapVariables += "    _"+column['name']+" = (map['"+column['name']+"']??'') as "+type+";\n"    
+                    returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
+                    fromMapVariables += "    _"+column['name']+" = (map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??'') as "+type+";\n"    
                 elif(column["type"] == "INTEGER" or column["type"] == "INT"  ) :
                     type = "int"
                     defaultValue = "0"
-                    returnVariables += "      '"+column['name']+"' : _"+column['name']+",\n"
-                    fromMapVariables += "    _"+column['name']+" = (map['"+column['name']+"']??0) as "+type+";\n"    
+                    returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
+                    fromMapVariables += "    _"+column['name']+" = (map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0) as "+type+";\n"    
                     if(column['name'].endswith('Id')) :
                         getFunctions += "  "+column['name'][0:1].upper()+column['name'][1:-2]+" get "+column['name'][0:-2]+" => _localDbObj."+column['name'][0:-2]+";\n"
-                        variableDefinitionDB += "  "+column['name'][0:1].upper()+column['name'][1:-2]+" _"+column['name'][0:-2]+" = "+column['name'][0:1].upper()+column['name'][1:-2]+"Impl.newObj();\n"
+                        variableDefinitionDB += "  "+column['name'][0:1].upper()+column['name'][1:-2]+" _"+column['name'][0:-2]+" = "+column['name'][0:1].upper()+column['name'][1:-2]+"Gen.newObj();\n"
                         getFunctionsDB += "  "+column['name'][0:1].upper()+column['name'][1:-2]+" get "+column['name'][0:-2]+" => _"+column['name'][0:-2]+";\n"
-                        openfk += "        "+column['name'][0:1].upper()+column['name'][1:-2]+"Impl.openObj(_"+column['name']+").then((value){\n"
+                        openfk += "        "+column['name'][0:1].upper()+column['name'][1:-2]+"Gen.openObj(_"+column['name']+").then((value){\n"
                         openfk += "          _"+column['name'][0:-2]+" = value ;\n"
                         openfk += "        });\n"
             
                         
                         fromMapVariables += "    if (_"+column['name']+" >0 )\n"
                         fromMapVariables += "    {\n"
-                        fromMapVariables += "      _"+column['name'][0:-2]+" = await "+column['name'][0:1].upper()+column['name'][1:-2]+"Impl.openObj(_"+column['name']+");\n"
+                        fromMapVariables += "      _"+column['name'][0:-2]+" = await "+column['name'][0:1].upper()+column['name'][1:-2]+"Gen.openObj(_"+column['name']+");\n"
                         fromMapVariables += "    }\n"
                         
-                        importDB += "import '../businessObj/"+column['name'][0:-2]+".dart';\n"
-                        importDB += "import '../businessObj/gen/"+column['name'][0:-2]+"Impl.dart';\n"
-                        importBusiness += "import '../"+column['name'][0:-2]+".dart';\n"
+                        importDB += "import '../../businessObj/"+column['name'][0:-2]+".dart';\n"
+                        importDB += "import '../businessObj/"+column['name'][0:-2]+"Gen.dart';\n"
+                        importBusiness += "import '../../businessObj/"+column['name'][0:-2]+".dart';\n"
                         
                 elif(column["type"] == "FLOAT"):
                     type = "double"
                     defaultValue = "0.0"
-                    returnVariables += "      '"+column['name']+"' : _"+column['name']+",\n"
-                    fromMapVariables += "    _"+column['name']+" = (map['"+column['name']+"']??0.0) as "+type+";\n"                        
+                    returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
+                    fromMapVariables += "    _"+column['name']+" = (map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0.0) as "+type+";\n"                        
                 elif(column["type"] == "DATETIME"):
                     type = "DateTime"
                     defaultValue = "DateTime.now()"
-                    returnVariables += "      '"+column['name']+"' : _"+column['name']+".millisecondsSinceEpoch,\n"
-                    fromMapVariables += "    _"+column['name']+" = DateTime.fromMillisecondsSinceEpoch((map['"+column['name']+"']??0) as int);\n"
+                    returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+".millisecondsSinceEpoch,\n"
+                    fromMapVariables += "    _"+column['name']+" = DateTime.fromMillisecondsSinceEpoch((map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0) as int);\n"
                 elif(column["type"] == "BOOLEAN"):
                     type = "bool"
                     defaultValue = "true"
-                    returnVariables += "      '"+column['name']+"' : _"+column['name']+",\n"
-                    fromMapVariables += "    _"+column['name']+" = ((map['"+column['name']+"']??0) as int) == 1;\n"    
+                    returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
+                    fromMapVariables += "    _"+column['name']+" = ((map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0) as int) == 1;\n"    
 
 
                 getFunctions += f"  {type} get {column['name']} => _localDbObj.{column['name']};\n"
@@ -96,14 +100,15 @@ for table in structure["tables"]:
                 setFunctionsDB += "  }\n"
                 
                
-
+                getColumnName += "  static const String COLUMN_"+column['name'].upper()+" = \""+column['name']+"\";\n"
         
         values = {
             "tablename": tableName,
             "Tablename": tableName[0].upper() + tableName[1:],
             "getFunctions": getFunctions,
             "setFunctions": setFunctions,
-            "importBusiness":importBusiness
+            "importBusiness":importBusiness,
+            "getColumnName" : getColumnName
         }
 
         valuesDB = {
@@ -120,12 +125,12 @@ for table in structure["tables"]:
         
 
 
-        with open('tablenameImpl.txt', 'r') as f:
+        with open('tablenameGen.txt', 'r') as f:
             src = Template(f.read())
             result = src.substitute(values)
             print(result)
             
-            with open("results/businessObj/gen/" + tableName + "Impl.dart", "w") as dartFile:
+            with open("results/generate/businessObj/" + tableName + "Gen.dart", "w") as dartFile:
                 dartFile.write(result)
 
         with open('tablename.txt', 'r') as f:
@@ -142,7 +147,7 @@ for table in structure["tables"]:
             result = src.substitute(valuesDB)
             print(result)
             
-            with open("results/databaseObj/" + tableName + "DB.dart", "w") as dartFile:
+            with open("results/generate/databaseObj/" + tableName + "DBGen.dart", "w") as dartFile:
                 dartFile.write(result)
 
 
