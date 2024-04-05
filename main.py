@@ -20,7 +20,7 @@ for table in structure["tables"]:
         setFunctions = ""
         importBusiness = ""
         getColumnName = "  static const String TABLE_NAME = \""+tableName+"\";\n"
-        getColumnName = "  static const String COLUMN_ID = \"id\";\n"
+        getColumnName += "  static const String COLUMN_ID = \"id\";\n"
 
 
         variableDefinitionDB = ""
@@ -135,6 +135,15 @@ for table in structure["tables"]:
             with open("results/generate/businessObj/" + tableName + "Gen.dart", "w") as dartFile:
                 dartFile.write(result)
 
+        with open('tablenameListGen.txt', 'r') as f:
+            src = Template(f.read())
+            result = src.substitute(values)
+            print(result)
+            
+            with open("results/generate/businessObj/" + tableName + "ListGen.dart", "w") as dartFile:
+                dartFile.write(result)
+
+
         with open('tablename.txt', 'r') as f:
             src = Template(f.read())
             result = src.substitute(values)
@@ -143,6 +152,15 @@ for table in structure["tables"]:
             with open("results/businessObj/" + tableName + ".dart", "w") as dartFile:
                 dartFile.write(result)
 
+        with open('tablenameList.txt', 'r') as f:
+            src = Template(f.read())
+            result = src.substitute(values)
+            print(result)
+            
+            with open("results/businessObj/" + tableName + "List.dart", "w") as dartFile:
+                dartFile.write(result)
+
+        
         
         with open('tablenameDB.txt', 'r') as f:
             src = Template(f.read())

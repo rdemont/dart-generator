@@ -20,7 +20,7 @@ $setFunctions
 
   Future<${Tablename}> open(int id)
   {
-    return query(tableName,where: "id = $$id").then((obj)
+    return query(${Tablename}Gen.TABLE_NAME,where: ${Tablename}Gen.COLUMN_ID+" = $$id").then((obj)
     {
       ${Tablename} result = ${Tablename}(this);
       if (!obj.isEmpty)
@@ -52,7 +52,7 @@ $returnVariables
   Future<${Tablename}> fromMap(Map<String,Object?> map)
   async {
     ${Tablename} result = ${Tablename}(this) ;
-    super.id = map["id"] as int; 
+    super.id = map[${Tablename}Gen.COLUMN_ID] as int; 
     
 $fromMapVariables
 

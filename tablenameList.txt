@@ -1,0 +1,12 @@
+import '${tablename}.dart';
+import '../generate/businessObj/${tablename}ListGen.dart';
+
+
+
+class ${Tablename}List extends ${Tablename}ListGen
+{
+
+  static Future<List<${Tablename}>> getAll([String? order]){
+    return ${Tablename}List.getAll(order);
+  }
+}
