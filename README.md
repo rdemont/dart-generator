@@ -2,7 +2,7 @@ Generator for flutter/Dart code base on a json with the structure (exemple is fi
 
 
 
-can be made in the openDB with this code 
+can be made in the openDB with this code and import 'dart:developer';
 
 ```
 db.rawQuery('SELECT * FROM sqlite_master ORDER BY name;').then((tables) 
