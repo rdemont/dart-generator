@@ -1,0 +1,32 @@
+import '../../databaseObj/${tablename}DB.dart';
+import '../${tablename}.dart';
+import '../businessObj.dart';
+${importBusiness}
+
+class ${Tablename}Impl extends BusinessObj
+{
+  ${Tablename}DB get _localDbObj => dbObj as ${Tablename}DB ;
+
+  ${Tablename}Impl(super.dbObj);
+
+$getFunctions
+
+$setFunctions
+
+  static ${Tablename} newObj(){
+    ${Tablename}DB objDb = ${Tablename}DB();
+    return objDb.newObj();
+  }
+
+  static Future<${Tablename}> openObj(int id){
+    ${Tablename}DB objDb = ${Tablename}DB();
+    return objDb.open(id);
+  }
+
+  static Future<${Tablename}> fromMap(Map<String,Object?>map){
+    ${Tablename}DB objDb = ${Tablename}DB();
+    return objDb.fromMap(map);
+  }
+
+
+}

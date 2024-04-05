@@ -1,0 +1,7 @@
+import 'gen/${tablename}Impl.dart';
+
+class ${Tablename} extends ${Tablename}Impl
+{
+  ${Tablename}(super.dbObj);
+
+}

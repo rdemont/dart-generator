@@ -1,0 +1,66 @@
+import '../businessObj/${tablename}.dart';
+import 'databaseObj.dart';
+${importDB}
+
+class ${Tablename}DB extends DatabaseObj {
+  
+$variableDefinition
+
+
+  ${Tablename}DB()
+  {
+    tableName = '${tablename}';
+  }
+
+$getFunctions
+
+
+$setFunctions
+
+  Future<${Tablename}> open(int id)
+  {
+    return query(tableName,where: "id = $$id").then((obj)
+    {
+      ${Tablename} result = ${Tablename}(this);
+      if (!obj.isEmpty)
+      {
+        fromMap(obj[0]);
+$openfk
+      }
+      return result ; 
+    });
+  }
+
+  ${Tablename} newObj()
+  {
+    ${Tablename} result = ${Tablename}(this);
+    return result ; 
+  }
+
+
+  @override
+  Map<String, Object?> toMap() 
+  {
+    //Map<String, Object?> result = super.toMap();
+    return{
+$returnVariables
+    };
+    
+  }
+
+
+  Future<${Tablename}> fromMap(Map<String,Object?> map)
+  async {
+    ${Tablename} result = ${Tablename}(this) ;
+    super.id = map["id"] as int; 
+    
+$fromMapVariables
+
+
+    return result; 
+
+  }
+
+
+
+}
