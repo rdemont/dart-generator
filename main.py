@@ -21,7 +21,7 @@ for table in structure["tables"]:
         importBusiness = ""
         getColumnName = "  static const String TABLE_NAME = \""+tableName+"\";\n"
         getColumnName += "  static const String COLUMN_ID = \"id\";\n"
-
+        
 
         variableDefinitionDB = ""
         getFunctionsDB = ""
@@ -30,7 +30,7 @@ for table in structure["tables"]:
         fromMapVariables = ""
         openfk = ""
         importDB = ""
-        
+        cloneDB = ""
                 
 
         for column in columns:
@@ -56,6 +56,21 @@ for table in structure["tables"]:
                         openfk += "          _"+column['name'][0:-2]+" = value ;\n"
                         openfk += "        });\n"
             
+
+                        setFunctions += "  set "+column["name"][0:-2]+"("+column['name'][0:1].upper()+column['name'][1:-2]+" value)\n"
+                        setFunctions += "  {\n"
+                        setFunctions += "    _localDbObj."+column["name"][0:-2]+" = value;\n"
+                        setFunctions += "  }\n"          
+
+                        setFunctionsDB += "  set "+column["name"][0:-2]+"("+column['name'][0:1].upper()+column['name'][1:-2]+" value)\n"
+                        setFunctionsDB += "  {\n"
+                        setFunctionsDB += "    if (_"+column['name']+" != value.id)\n"
+                        setFunctionsDB += "    {\n"
+                        setFunctionsDB += "      dataUpdated(); \n"
+                        setFunctionsDB += "      _"+column['name']+" = value.id;\n"
+                        setFunctionsDB += "      _"+column["name"][0:-2]+" = value;\n"
+                        setFunctionsDB += "    }\n"
+                        setFunctionsDB += "  }\n"
                         
                         fromMapVariables += "    if (_"+column['name']+" >0 )\n"
                         fromMapVariables += "    {\n"
@@ -83,26 +98,37 @@ for table in structure["tables"]:
                     fromMapVariables += "    _"+column['name']+" = ((map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0) as int) == 1;\n"    
 
 
+
                 getFunctions += f"  {type} get {column['name']} => _localDbObj.{column['name']};\n"
-                setFunctions += "  set "+column["name"]+"("+type+" value)\n"
-                setFunctions += "  {\n"
-                setFunctions += "    _localDbObj."+column["name"]+" = value;\n"
-                setFunctions += "  }\n"
+
+
+                if(not column['name'].endswith('Id')): 
+                    setFunctions += "  set "+column["name"]+"("+type+" value)\n"
+                    setFunctions += "  {\n"
+                    setFunctions += "    _localDbObj."+column["name"]+" = value;\n"
+                    setFunctions += "  }\n"
+
+                    setFunctionsDB += "  set "+column['name']+"("+type+" value)\n"
+                    setFunctionsDB += "  {\n"
+                    setFunctionsDB += "    if (_"+column['name']+" != value)\n"
+                    setFunctionsDB += "    {\n"
+                    setFunctionsDB += "      dataUpdated(); \n"
+                    setFunctionsDB += "      _"+column['name']+" = value;\n"
+                    setFunctionsDB += "    }\n"
+                    setFunctionsDB += "  }\n"
+
                 
 
                 variableDefinitionDB += "  "+type+" _"+column['name']+" = "+defaultValue+";\n"
                 getFunctionsDB += "  "+type+" get "+column['name']+" => _"+column['name']+";\n"
-                setFunctionsDB += "  set "+column['name']+"("+type+" value)\n"
-                setFunctionsDB += "  {\n"
-                setFunctionsDB += "    if (_"+column['name']+" != value)\n"
-                setFunctionsDB += "    {\n"
-                setFunctionsDB += "      dataUpdated(); \n"
-                setFunctionsDB += "      _"+column['name']+" = value;\n"
-                setFunctionsDB += "    }\n"
-                setFunctionsDB += "  }\n"
                 
                
                 getColumnName += "  static const String COLUMN_"+column['name'].upper()+" = \""+column['name']+"\";\n"
+
+
+                cloneDB += "    (value as "+tableName[0].upper() + tableName[1:]+"DBGen)._"+column['name']+" = "+column['name']+";\n"
+                
+
         
         values = {
             "tablename": tableName,
@@ -110,7 +136,8 @@ for table in structure["tables"]:
             "getFunctions": getFunctions,
             "setFunctions": setFunctions,
             "importBusiness":importBusiness,
-            "getColumnName" : getColumnName
+            "getColumnName" : getColumnName,
+            
         }
 
         valuesDB = {
@@ -122,7 +149,8 @@ for table in structure["tables"]:
             "returnVariables": returnVariables,
             "fromMapVariables": fromMapVariables,
             "openfk": openfk,
-            "importDB" : importDB
+            "importDB" : importDB,
+            "cloneDB" : cloneDB
         }
         
 

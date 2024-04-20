@@ -61,6 +61,11 @@ $fromMapVariables
 
   }
 
-
-
+ 
+  @override
+  clone(DatabaseObj value)
+  {
+    super.clone(value);
+$cloneDB
+  }
 }

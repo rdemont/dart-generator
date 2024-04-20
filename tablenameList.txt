@@ -7,6 +7,6 @@ class ${Tablename}List extends ${Tablename}ListGen
 {
 
   static Future<List<${Tablename}>> getAll([String? order]){
-    return ${Tablename}GenList.getAll(order);
+    return ${Tablename}ListGen.getAll(order);
   }
 }

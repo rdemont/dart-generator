@@ -31,5 +31,13 @@ $setFunctions
     return objDb.fromMap(map);
   }
 
+  @override
+  ${Tablename} clone() {
+    ${Tablename} result = ${Tablename}Gen.newObj(); 
+
+    super.cloneDB(result._localDbObj);
+    
+    return result ; 
+  }
 
 }
