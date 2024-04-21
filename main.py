@@ -38,12 +38,12 @@ for table in structure["tables"]:
             
 
             
-                if(column["type"] == "TEXT"):
+                if(column["type"].upper() == "TEXT"):
                     type = "String"
                     defaultValue = "''"
                     returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
                     fromMapVariables += "    _"+column['name']+" = (map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??'') as "+type+";\n"    
-                elif(column["type"] == "INTEGER" or column["type"] == "INT"  ) :
+                elif(column["type"].upper() == "INTEGER" or column["type"].upper() == "INT"  ) :
                     type = "int"
                     defaultValue = "0"
                     returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
@@ -81,17 +81,17 @@ for table in structure["tables"]:
                         importDB += "import '../businessObj/"+column['name'][0:-2]+"Gen.dart';\n"
                         importBusiness += "import '../../businessObj/"+column['name'][0:-2]+".dart';\n"
                         
-                elif(column["type"] == "FLOAT"):
+                elif(column["type"].upper() == "FLOAT"):
                     type = "double"
                     defaultValue = "0.0"
                     returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
                     fromMapVariables += "    _"+column['name']+" = (map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0.0) as "+type+";\n"                        
-                elif(column["type"] == "DATETIME"):
+                elif(column["type"].upper() == "DATETIME"):
                     type = "DateTime"
                     defaultValue = "DateTime.now()"
                     returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+".millisecondsSinceEpoch,\n"
                     fromMapVariables += "    _"+column['name']+" = DateTime.fromMillisecondsSinceEpoch((map["+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+"]??0) as int);\n"
-                elif(column["type"] == "BOOLEAN"):
+                elif(column["type"].upper() == "BOOLEAN"):
                     type = "bool"
                     defaultValue = "true"
                     returnVariables += "      "+tableName[0].upper() + tableName[1:]+"Gen.COLUMN_"+column['name'].upper()+" : _"+column['name']+",\n"
