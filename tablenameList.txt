@@ -7,6 +7,12 @@ class ${Tablename}List extends ${Tablename}ListGen
 {
 
   static Future<List<${Tablename}>> getAll([String? order]){
-    return ${Tablename}ListGen.getAll(order);
+    return ${Tablename}ListGen.getAll(order: order);
   }
+
+  static Future<List<${Tablename}>> getQuery({String? order, String? where}){
+    return ${Tablename}ListGen.getQuery(order:order,where:where);
+    
+  } 
+
 }

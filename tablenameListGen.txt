@@ -8,7 +8,7 @@ class ${Tablename}ListGen
 {
 
   
-  static Future<List<${Tablename}>> getAll([String? order]){
+  static Future<List<${Tablename}>> getAll({String? order}){
     return DatabaseService.initializeDb().then((db) {
       return db.query(${Tablename}Gen.TABLE_NAME,orderBy: order??${Tablename}Gen.COLUMN_ID).then((raws) async {
         List<${Tablename}> result = [];
@@ -20,4 +20,20 @@ class ${Tablename}ListGen
       });
     });
   }
+
+
+
+  static Future<List<${Tablename}>> getQuery({String? order, String? where}){
+    return DatabaseService.initializeDb().then((db) {
+      return db.query(${Tablename}Gen.TABLE_NAME,orderBy: order??${Tablename}Gen.COLUMN_ID, where: where).then((raws) async {
+        List<${Tablename}> result = [];
+        for (int i = 0 ; i< raws.length;i++)
+        {
+          result.add(await ${Tablename}Gen.fromMap(raws[i]));
+        }
+        return result ; 
+      });
+    });
+  }
+
 }
